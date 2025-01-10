@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery
+  labels:
+    app: celery
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: celery
+  template:
+    metadata:
+      labels:
+        app: celery
+    spec:
+      containers:
+        - name: celery
+          image: lanneeer/celery-app
+          command:
+            ["celery", "-A", "main.celery_app", "worker", "--loglevel=info"]
+          env:
+            - name: RABBITMQ_HOST
+              value: rabbitmq
+            - name: REDIS_HOST
+              value: redis
